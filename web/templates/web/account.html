@@ -1,0 +1,43 @@
+{% extends 'web/layout.html' %}
+
+{% block title %} 
+    Account
+{% endblock %}
+
+  {% block body %}
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Hello {{account.user_detail.first_name}}!</h1>
+        <p>Here are your Account Details!</p>
+      </div>
+    </section>
+
+    <section class="services">
+      <h2>Account</h2>
+      <p>Account Number: {{account.account_number}}</p>
+      <div class="service-card">
+        <h3>Cash Balance: {{account.cash_balance}}</h3>
+        <button>Add Cash</button>
+        <button>Withdraw Cash</button>
+      </div>
+      <h2>Shares</h2>
+      {% if shares.count == 0 %}
+        <div class="service-card">
+            <h2>Buy some Shares!</h2>
+            <a href="{% url 'web:marketplace' %}"><button>Buy Shares</button></a>
+        </div> 
+      {% else %}
+        {% for x in shares %}
+            <div class="service-card">
+                <h3>{{x.fund_of_shares.name}} share {{x.share_id}}</h3>
+                <h3>Current Value: {{x.current_value}}</h3>
+                <h5>Purchase Price: {{x.share_price_at_purchase}}</h5>
+                {% if x.outstanding %} 
+                    <h4>Share is Marked for Sale (outstanding)</h4>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% endif %}
+    </section>
+    {% endblock %}
+  

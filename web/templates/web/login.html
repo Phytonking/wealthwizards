@@ -1,0 +1,25 @@
+{% extends 'web/layout.html' %}
+
+{% block title %} 
+    Login
+{% endblock %}
+
+{% block body %}
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Login</h1>
+        <p>Don't have an account? Click here to <a href="{% url 'web:register' %}">Register</a></p>
+      </div>
+    </section>
+
+    <section class="services">
+      <form action="{% url 'web:login' %}" method="post">
+        {% csrf_token %}
+        <input name="username" placeholder="Username" type="text"><br>
+        <input name="password" placeholder="Password" type="password"><br><br>
+        <input type="submit" class="btn" value="Login">
+        <p style="color: red">{{error}}</p>
+      </form>
+    </section>
+{% endblock %}
+

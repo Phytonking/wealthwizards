@@ -1,0 +1,35 @@
+{% extends 'web/layout.html' %}
+
+{% block title %} 
+    Account
+{% endblock %}
+
+  {% block body %}
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Marketplace</h1>
+      </div>
+    </section>
+
+    <section class="services">
+      
+      <div class="service-card">
+        <h3>Available Cash for Trades</h3>
+        <p>Account Number: {{account.account_number}}</p>
+        <h3>Cash Balance: {{account.cash_balance}}</h3>
+      </div>
+      <h2>Funds</h2>
+      {% for x in sharesForSale %} 
+
+        <div class="service-card">
+            <h3>{{x.fundName}}</h3>
+            <h4>Value: {{x.currentValue}}</h4>
+            <h4>Shares Available for Purchase: {{x.numberOfShares}}</h4>
+            <a href=""><button>Trade {{x.fundName}}</button></a>
+        </div>
+       
+        
+      {% endfor %}
+    </section>
+    {% endblock %}
+  

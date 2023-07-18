@@ -1,0 +1,48 @@
+{% extends 'web/layout.html' %}
+
+{% block title %} 
+    Register
+{% endblock %}
+
+{% block body %}
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Register</h1>
+        <p>Already have an account? Click here to <a href="{% url 'web:login' %}">Login</a></p>
+      </div>
+    </section>
+
+    <section class="services">
+      <form action="{% url 'web:register' %}" method="post">
+        {% csrf_token %}
+        <h3>Customer Information</h3>
+        First Name: <input name="first_name" placeholder="First Name" type="text" required><br>
+        Last Name: <input name="last_name" placeholder="Last Name" type="text" required><br>
+        Email: <input name="email" placeholder="Email" type="email" required><br>
+        Telephone: <input name="telephone" placeholder="Telephone Number" type="tel" required><br>
+        Social Security Number/ITIN: <input name="SSN" placeholder="Enter SSN or ITIN" type="password" required><br>
+        Date of Birth: <input type="date" placeholder="Date of Birth" name="DOB" required><br>
+        Username: <input name="username" placeholder="Username" type="text" required><br>
+        Password: <input name="password" placeholder="Password" type="password" required><br><br>
+
+        <div class="parental-info">
+            <h3>Parent/Legal Guardian Information</h3>
+            First Name: <input name="parent_first_name" placeholder="First Name" type="text" required><br>
+            Last Name: <input name="parent_last_name" placeholder="Last Name" type="text" required><br>
+            Email: <input name="parent_email" placeholder="Email" type="email" required><br>
+            Telephone: <input name="parent_telephone" placeholder="Telephone Number" type="tel" required><br>
+            Date of Birth: <input type="date" placeholder="Date of Birth" name="parent_DOB" required><br>
+            Social Security Number: <input name="telephone" placeholder="Enter SSN" type="password" required><br>
+        </div>
+
+        <div class="financial-info">
+            <h3>Financial/Bank Information</h3>
+            Bank: <input name="bankName" placeholder="Bank Name" type="text" required><br>
+            Bank Account Number: <input name="bankAccNum" placeholder="Bank Account Number" type="text" required><br>
+            Bank Routing Number: <input name="bankRoutNum" placeholder="Bank Routing Number" type="text" required><br>
+        </div>
+        <input type="submit" class="btn" value="Register New Account">
+      </form>
+    </section>
+{% endblock %}
+

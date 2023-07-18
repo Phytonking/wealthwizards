@@ -1,0 +1,89 @@
+/* Reset default browser styles */
+body, h2, h3, label, input, button {
+  margin: 0;
+  padding: 0;
+}
+
+h3, h2 {
+  color: white;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.5;
+  background-color: rgb(156, 203, 156);
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.registration-form {
+  padding: 40px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.registration-form h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #176f2c;
+}
+
+.registration-form h3 {
+  margin-bottom: 10px;
+  color: #176f2c;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  color: #176f2c;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="password"],
+input[type="date"], 
+input[type="number"]
+select{
+  width: 50%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.btn, button {
+  display: block;
+  width: 10%;
+  padding: 10px;
+  background-color: #b48d32;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 10px;
+}
+
+button:hover {
+  background-color: #8a6c23;
+}
+
+.hidden {
+  display: none;
+}
+
+.service-card{
+  border: 2px black solid;
+  margin: 10px;
+}
