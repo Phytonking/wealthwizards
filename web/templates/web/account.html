@@ -27,15 +27,21 @@
             <a href="{% url 'web:marketplace' %}"><button>Buy Shares</button></a>
         </div> 
       {% else %}
-        {% for x in shares %}
-            <div class="service-card">
-                <h3>{{x.fund_of_shares.name}} share {{x.share_id}}</h3>
-                <h3>Current Value: {{x.current_value}}</h3>
-                <h5>Purchase Price: {{x.share_price_at_purchase}}</h5>
-                {% if x.outstanding %} 
-                    <h4>Share is Marked for Sale (outstanding)</h4>
-                {% endif %}
-            </div>
+        {% for shares in organized_shares %}
+          <div class="service-card">
+            <h3>{{shares.0.name}}</h3>
+            <h3>Current Value: {{shares.0.current_value}}</h3>
+            {% for x in shares %}
+              <div class="service-card">
+                  <h3>{{x.fund_of_shares.name}} share {{x.share_id}}</h3>
+                  <h3>Current Value: {{x.current_value}}</h3>
+                  <h5>Purchase Price: {{x.share_price_at_purchase}}</h5>
+                  {% if x.outstanding %} 
+                      <h4>Share is Marked for Sale (outstanding)</h4>
+                  {% endif %}
+              </div>
+          {% endfor %}
+          </div>
         {% endfor %}
     {% endif %}
     </section>
