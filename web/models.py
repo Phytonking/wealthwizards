@@ -39,3 +39,8 @@ class Share(models.Model):
             res += " (OUTSTANDING)"
         return res
     
+class OTP(models.Model):
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="for_user")
+    one_time_password = models.TextField()
+    expired = models.BooleanField()
+

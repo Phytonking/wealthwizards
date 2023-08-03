@@ -4,3 +4,4 @@ from web.models import *
 admin.site.register(Account)
 admin.site.register(Fund)
 admin.site.register(Share)
+admin.site.register(OTP)

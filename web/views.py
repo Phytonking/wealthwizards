@@ -6,7 +6,7 @@ from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.decorators import login_required
 from django_otp import user_has_device
-from django_otp.forms import OTPAuthenticationForm
+from web.tools import *
 
 # Create your views here.
 def index(request: HttpRequest):
@@ -18,11 +18,14 @@ def login_view(request: HttpRequest):
     else:
         username = request.POST["username"]
         password = request.POST["password"]
-        us = User.objects.get(username=username)
+        try:
+            us = User.objects.get(username=username)
+        except User.DoesNotExist:
+            return render(request, "web/login.html", {"error": "User does not exist"})
         au = authenticate(username=username, password=password)
         if au is not None:
-            login(request, au)
-            return HttpResponseRedirect(reverse("web:account"))
+            request.session['firstFactor'] = request.POST
+            return HttpResponseRedirect(reverse("web:second_factor_login"))
         else:
             return render(request, "web/login.html", {"error": "Incorrect Username or Password"})
         
@@ -76,17 +79,27 @@ def trader_view(request: HttpRequest):
 
 
 def second_factor_login(request):
-    if not user_has_device(request.user):
-        # If the user does not have an OTP device, redirect them to the first-factor login view
-        return redirect('first_factor_login')
-
+    info = request.session.get("firstFactor")
+    print(info)
+    us = User.objects.get(username=info["username"])
+    ac = Account.objects.get(user_detail=us)
     if request.method == 'POST':
-        form = OTPAuthenticationForm(request, data=request.POST)
-        if form.is_valid():
+        try:
+            userOTP = OTP.objects.get(user=us, expired=False)
+        except OTP.DoesNotExist:
+            return render(request, 'web/second_factor_login.html', {"Error": "OTP does not exist with user. "})
+        userData = request.POST["OTP-TOKEN"]
+        if userOTP.one_time_password == userData:
             # The one-time code is correct, log the user in
-            login(request, form.user)
-            return redirect('home')  # Redirect to the home page after successful login
+            userOTP.expired=True
+            userOTP.delete()
+            login(request, us)
+            return HttpResponseRedirect(reverse("web:account"))  # Redirect to the home page after successful login
     else:
-        form = OTPAuthenticationForm(request)
-
-    return render(request, 'second_factor_login.html', {'form': form})
+        outstandingOTPs = OTP.objects.filter(user=us)
+        outstandingOTPs.delete()
+        otp = generate_OTP(ac.account_number)
+        OTPClass = OTP(user=us, one_time_password=otp, expired=False)
+        OTPClass.save()
+        send_otp_email(user=us, otp=OTPClass) 
+        return render(request, 'web/second_factor_login.html')

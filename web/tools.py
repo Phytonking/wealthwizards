@@ -1,5 +1,8 @@
 from uuid import uuid4
 import web.models as wm
+from django.core.mail import send_mail
+from django_otp import devices_for_user
+
 wealthWizardsAccount = wm.Account.objects.get(account_number="7942987610154218")
 
 
@@ -98,9 +101,56 @@ def process_purchase(buyer: wm.Account, fund: wm.Fund, numberOfShares: int):
 
 
 
-            
+#OTP WORK            
+
+import time
+import hmac
+import hashlib
+
+def generate_OTP(secret_key, time_step=30, digits=6):
+    """
+    Generate a basic One-Time Password (OTP) based on time.
+
+    Parameters:
+        secret_key (str): The secret key shared between the server and the user.
+        time_step (int, optional): The time step in seconds. Default is 30 seconds.
+        digits (int, optional): The number of digits in the OTP. Default is 6.
+
+    Returns:
+        str: The generated OTP.
+    """
+    # Get the current time in seconds
+    current_time = int(time.time())
+    # Calculate the number of time steps that have passed since the epoch
+    time_steps = current_time // time_step
+    # Convert the time steps to bytes
+    time_steps_bytes = time_steps.to_bytes(8, 'big')
+    #Convert the secret key to bytes
+    secret_key_bytes = secret_key.encode('utf-8')
+    # Calculate the HMAC-SHA-1 of the time steps using the secret key
+    hmac_result = hmac.new(secret_key_bytes, time_steps_bytes, hashlib.sha1).digest()
+    # Get the offset value from the last 4 bits of the HMAC result
+    offset = hmac_result[-1] & 0x0F
+    # Extract a 4-byte integer from the HMAC result based on the offset
+    truncated_hash = hmac_result[offset:offset+4]
+    # Convert the 4-byte integer to a six-digit OTP
+    otp = int.from_bytes(truncated_hash, 'big') % (10 ** digits)
+    return str(otp).zfill(digits)
 
 
 
+
+
+
+
+def send_otp_email(user: wm.User, otp: wm.OTP):
+    # Generate a one-time code
+    # Send the one-time code via email
+    subject = 'Your One-Time Code for 2FA'
+    message = f'Your one-time code is: {otp.one_time_password}'
+    from_email = 'avi.agola@outlook.com'  # Replace with your email
+    recipient_list = [user.email]
+    send_mail(subject, message, from_email, recipient_list)
+    print("Email Sent Successfully")
 
 

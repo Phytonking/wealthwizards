@@ -1,0 +1,19 @@
+{% extends 'web/layout.html' %}
+
+{% block title %}
+    <title>Two-Factor Authentication</title>
+{% endblock %}
+
+
+{% block body %}
+    <h1>Enter One-Time Code</h1>
+    <form action="{% url 'web:second_factor_login' %}" method="POST">
+        {% csrf_token %}
+        <div class="form-row"> 
+            <input type="text" placeholder="Enter OTP" name="OTP-TOKEN" required>
+        </div>
+        <div class="submit-row">
+            <input type="submit" value="Log in"/>
+        </div>
+    </form>
+{% endblock %}
