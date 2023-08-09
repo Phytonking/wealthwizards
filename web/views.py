@@ -31,7 +31,11 @@ def login_view(request: HttpRequest):
         
 
 def register_view(request: HttpRequest):
-    return render(request, "web/register.html")
+    if request.method == "GET":
+        return render(request, "web/register.html")
+    else:
+        # add connections to Plaid
+        return HttpResponseRedirect(reverse("web:login"))
 
 @login_required(login_url='/login')
 def logout_view(request):

@@ -97,7 +97,7 @@ if PLAID_ENV == 'production':
 # that the bank website should redirect to. You will need to configure
 # this redirect URI for your client ID through the Plaid developer dashboard
 # at https://dashboard.plaid.com/team/api.
-PLAID_REDIRECT_URI = 'http://localhost:3000'
+PLAID_REDIRECT_URI = 'http://localhost:8000/'
 
 configuration = plaid.Configuration(
     host=host,
@@ -194,7 +194,6 @@ def create_link_token_for_payment():
                 payment_id=payment_id
             )
         )
-
         if PLAID_REDIRECT_URI!=None:
             linkRequest['redirect_uri']=PLAID_REDIRECT_URI
         linkResponse = client.link_token_create(linkRequest)
@@ -593,4 +592,4 @@ def authorize_and_create_transfer(access_token):
 
 
 if __name__ == '__main__':
-    app.run(port=int(os.getenv('PORT', 8000)))
+    app.run(port=int(os.getenv('PORT', 5000)))
