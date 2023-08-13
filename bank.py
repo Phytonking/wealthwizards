@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 import requests
 import json
 r = requests.post('http://127.0.0.1:5000/api/create_link_token', verify=True)
@@ -7,6 +6,7 @@ print(r.json())
 
 <<<<<<< Updated upstream
 print(r.json())
+<<<<<<< Updated upstream
 =======
 import plaid
 
@@ -50,4 +50,6 @@ for transaction in transactions:
 access_token = requests.post('http://127.0.0.1:5000/api/set_access_token', verify=True)
 
 print(access_token.json())
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes

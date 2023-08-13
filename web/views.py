@@ -5,7 +5,6 @@ from web.models import *
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.decorators import login_required
-from django_otp import user_has_device
 from web.tools import *
 from uuid import *
 
@@ -85,7 +84,7 @@ def trader_view(request: HttpRequest, fundID: UUID):
         })
     
 
-
+@login_required(login_url='/login')
 def second_factor_login(request):
     info = request.session.get("firstFactor")
     print(info)
