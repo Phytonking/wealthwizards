@@ -12,7 +12,7 @@
     </section>
 
     <section class="services">
-      <form action="{% url 'web:trader' %}" method="post">
+      <form action="{% url 'web:trader' FundToTrade.fund_id %}" method="post">
         {% csrf_token %}
         <select name="fund">
             {% for fund in funds %}

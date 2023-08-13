@@ -9,15 +9,31 @@
       <div class="hero-content">
         <h1>Welcome to our Investment Platform</h1>
         <p>Start growing your wealth with our expert investment solutions.</p>
+        <!--
         <a href="#"><button>Get Started</button></a>
+        -->
       </div>
     </section>
-
+    <style>
+      .container {
+        display: flex;
+        align-items: center;
+      }
+    
+      .image {
+        max-width: 400px;
+        max-height: 300px;
+        margin-right: 20px;
+      }
+    </style>
     <section class="services">
       <h2>Our Services</h2>
-      <div class="service-card">
-        <h3>Stock Market Investments</h3>
-        <p>Invest in a diverse range of stocks and maximize your returns.</p>
+      <div class="container service-card">
+        <img class="image" src="https://cdn.pixabay.com/photo/2017/12/17/17/27/city-3024616_1280.jpg" alt="An Example Image">
+        <div>
+          <h2>Investments</h2>
+          <p>GabaGabagoo</p>
+        </div>
       </div>
       <div class="service-card">
         <h3>Mutual Funds</h3>
@@ -28,6 +44,7 @@
         <p>Secure your future with personalized retirement plans.</p>
       </div>
     </section>
+    
     {% endblock %}
   
 

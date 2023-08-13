@@ -7,6 +7,7 @@ from django.contrib.auth.models import AnonymousUser
 from django.contrib.auth.decorators import login_required
 from django_otp import user_has_device
 from web.tools import *
+from uuid import *
 
 # Create your views here.
 def index(request: HttpRequest):
@@ -69,16 +70,19 @@ def marketplace_view(request: HttpRequest):
     funds = Fund.objects.all()
     for x in funds:
         shares = Share.objects.filter(fund_of_shares=x, outstanding=True)
-        fund_dict = {"fundName": x.name, "fund_info": x, "sharesForSale": shares, "currentValue": shares[0].current_value, "numberOfShares": shares.count()}
+        fund_dict = {"fund_id":x.fund_id,"fundName": x.name, "fund_info": x, "sharesForSale": shares, "currentValue": shares[0].current_value, "numberOfShares": shares.count()}
         shares_for_sale.append(fund_dict)
     if request.method == "GET":
         acc = Account.objects.get(user_detail=request.user)
         return render(request, "web/marketplace.html", {"sharesForSale": shares_for_sale, "account": acc})
     
 @login_required(login_url='/login')
-def trader_view(request: HttpRequest):
+def trader_view(request: HttpRequest, fundID: UUID):
     if request.method == "GET":
-        return render(request, "web/trader.html")
+        return render(request, "web/trader.html", {
+            "funds":Fund.objects.all(),
+            "FundToTrade": Fund.objects.get(fund_id=fundID)
+        })
     
 
 

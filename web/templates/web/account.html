@@ -15,16 +15,20 @@
     <section class="services">
       <h2>Account</h2>
       <p>Account Number: {{account.account_number}}</p>
-      <div class="service-card">
+      <div class="service-card" style="border: 2px black solid; margin-top: 10px; margin-bottom: 10px;">
         <h3>Cash Balance: {{account.cash_balance}}</h3>
-        <button>Add Cash</button>
-        <button>Withdraw Cash</button>
+        <button style="margin: 2px;">Add Cash</button>
+        <button style="margin: 2px;">Withdraw Cash</button>
       </div>
+      <hr style="color:black;">
       <h2>Shares</h2>
-      {% if shares.count == 0 %}
+      {% if shares|length == 0 %}
         <div class="service-card">
-            <h2>Buy some Shares!</h2>
-            <a href="{% url 'web:marketplace' %}"><button>Buy Shares</button></a>
+            <h4>No Shares Owned</h4>
+            <div lass="service-card" style="border: 2px black solid; margin-top: 10px; margin-bottom: 10px;">
+              <h4>Buy some Shares!</h4>
+              <a href="{% url 'web:marketplace' %}"><button style="margin: 2px;">Buy Shares</button></a>
+            </div>
         </div> 
       {% else %}
         {% for shares in organized_shares %}

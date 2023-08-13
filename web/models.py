@@ -8,14 +8,14 @@ class Fund(models.Model):
     fund_id = models.UUIDField(null=True)
     name = models.TextField()
     number_of_shares = models.BigIntegerField()
-    fund_value = models.FloatField()
+    fund_value = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
         return f"{self.name} - {self.number_of_shares} shares - Worth: ${self.fund_value}"
 
 class Account(models.Model):
     user_detail = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="user_account")
-    cash_balance = models.FloatField()
+    cash_balance = models.DecimalField(max_digits=10, decimal_places=2)
     account_number = models.TextField()
     verified = models.BooleanField()
 
@@ -25,8 +25,8 @@ class Account(models.Model):
 class Share(models.Model):
     share_id = models.UUIDField(auto_created=True)
     owner = models.ForeignKey(Account, on_delete=models.DO_NOTHING, related_name="owner_of_share", null=True)
-    share_price_at_purchase = models.FloatField(null=True)
-    current_value = models.FloatField(null=True)
+    share_price_at_purchase = models.DecimalField(null=True, decimal_places=2, max_digits=10)
+    current_value = models.DecimalField(null=True, decimal_places=2, max_digits=10)
     fund_of_shares = models.ForeignKey(Fund, on_delete=models.DO_NOTHING, related_name="fund_purchased")
     sold = models.BooleanField(null=True)
     outstanding = models.BooleanField(null=True)
@@ -44,3 +44,34 @@ class OTP(models.Model):
     one_time_password = models.TextField()
     expired = models.BooleanField()
 
+class TransactionType(models.TextChoices):
+    WITHDRAWAL = 'withdrawal', 'Withdrawal'
+    DEPOSIT = 'deposit', 'Deposit'
+    TRANSFER = 'transfer', 'Transfer'
+
+class Transaction(models.Model):
+    money_sender = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="money_sender", null=True)
+    money_reciever = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="money_reciever", null=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    transaction_type = models.CharField(
+        max_length=10,
+        choices=TransactionType.choices,
+        default=TransactionType.DEPOSIT,
+    )
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+class OrderType(models.TextChoices):
+    BUY="Buy", "buy"
+    SELL="Sell", "sell"
+
+class TradeOrder(models.Model):
+    orderer = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name="personOrdering")
+    shares_of = models.ForeignKey(Fund, on_delete=models.DO_NOTHING, related_name="sharesOf")
+    trade_type = models.CharField(
+        max_length=10,
+        choices=OrderType.choices,
+        default=OrderType.BUY
+    )
+    processed=models.BooleanField()
+    
+    

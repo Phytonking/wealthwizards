@@ -10,5 +10,5 @@ urlpatterns = [
     path('account', account_view, name="account"),
     path('logout', logout_view, name="logout"),
     path('marketplace', marketplace_view, name="marketplace"),
-    path('trader', trader_view, name="trader")
+    path('trader/<uuid:fundID>', trader_view, name="trader")
 ]
