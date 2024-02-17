@@ -2,7 +2,7 @@ from uuid import uuid4
 import web.models as wm
 from django.core.mail import send_mail
 from django_otp import devices_for_user
-
+from datetime import *
 wealthWizardsAccount = wm.Account.objects.get(account_number="7942987610154218")
 
 
@@ -30,7 +30,11 @@ def share_valuation_update(fund):
     for x in wm.Fund.objects.all():
         update_valuation(x)
 
-
+def is_over_18(birth_date):
+    current_date = datetime.now()
+    birth_date = datetime.strptime(birth_date, '%Y-%m-%d')
+    age = current_date.year - birth_date.year - ((current_date.month, current_date.day) < (birth_date.month, birth_date.day))
+    return age >= 18
 
 # processing purchases
 
@@ -55,14 +59,14 @@ def checkCashBalanceAndDeduct(account, amount_needed):
     if account.cash_balance < amount_needed:
         return False
     else:
-        account.cash_balance -= amount_needed*1.01
-        wealthWizardsAccount.cash_balance += amount_needed*1.01
+        account.cash_balance = float(account.cash_balance)-float(amount_needed)
+        wealthWizardsAccount.cash_balance = float(amount_needed) + float(account.cash_balance)
         return True
     
-def checkSharesForSale(fund, amountRequested):
+def checkSharesForSale(fund, amountRequested: int):
     sharesForSale = wm.Share.objects.filter(fund_of_shares=fund, outstanding=True, sold=False)
     if sharesForSale.count() < amountRequested:
-        return False
+        return []
     else:
         return sharesForSale[0:amountRequested-1]
 
@@ -70,13 +74,14 @@ def mark_sold(shares, new_owner):
     for share in shares:
         share.sold=True
         share.owner = new_owner
+        share.outstanding = False
 
 def payout(OwnersAndPayouts):
     global wealthWizardsAccount
     for l in OwnersAndPayouts:
         payee = l["owner"]
-        wealthWizardsAccount.cash_balance -= l["payout"]
-        payee.cash_balance += l["payout"]
+        wealthWizardsAccount.cash_balance = float(wealthWizardsAccount.cash_balance)-float(l["payout"])
+        payee.cash_balance = float(payee.cash_balance) + float(l["payout"])
         payee.save()
 
 
@@ -89,7 +94,7 @@ def process_purchase(buyer: wm.Account, fund: wm.Fund, numberOfShares: int):
         amt_needed = 0.00
         for x in shares_to_be_purchased:
             previousOwnersAndPayouts.append({"owner": x.owner, "payout": x.current_value})
-            amt_needed += x.current_value
+            amt_needed = float(amt_needed + float(x.current_value))
         transact = checkCashBalanceAndDeduct(buyer, amt_needed)
         if transact != True:
             return False

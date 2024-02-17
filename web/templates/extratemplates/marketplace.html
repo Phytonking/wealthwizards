@@ -1,0 +1,34 @@
+{% extends 'extratemplates/layout.html' %}
+{% load static %}
+
+{% block title %} 
+Marketplace
+{% endblock %}
+
+{% block body %}
+    <section class="py-5">
+        <div class="container py-5">
+            <div class="row mb-4 mb-lg-5">
+                <div class="col-md-8 col-xl-6 text-center mx-auto">
+                    <h2 class="fw-bold">Marketplace</h2>
+                    <p class="text-muted">Account Number: {{account.account_number}}&nbsp;</p>
+                    <h3>Cash Balance: {{account.cash_balance}}</h3>
+                    <hr>
+                </div>
+            </div>
+            <div class="row mx-auto">
+                <div class="col">
+                    {% for x in sharesForSale %} 
+                        <div class="service-card">
+                            <h3>{{x.fundName}}</h3>
+                            <h4>Value: {{x.currentValue}}</h4>
+                            <h4>Shares Available for Purchase: {{x.numberOfShares}}</h4>
+                            <a class="btn btn-primary shadow" role="button" style="background-color:limegreen" href="{% url 'web:trader' x.fund_id %}">Trade {{x.fundName}}</a>
+                        </div>
+                        <hr>    
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}

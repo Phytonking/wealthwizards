@@ -1,0 +1,43 @@
+{% extends 'extratemplates/layout.html' %}
+{% load static %}
+
+{% block title %} 
+My Account
+{% endblock %}
+
+{% block body %}
+    <div class="container py-5">
+        <div class="row mb-4 mb-lg-5">
+            <div class="col-md-8 col-xl-6 text-center mx-auto">
+                <h2 class="fw-bold">Your Account</h2>
+                <p class="text-muted">Account Number: {{account.account_number}}&nbsp;</p>
+                <h3>Cash Balance: {{account.cash_balance}}</h3>
+                <a class="btn btn-primary shadow" role="button" href="">Add Cash</a>
+                <a class="btn btn-primary shadow" role="button" href="">Withdraw Cash</a>
+            </div>
+        </div>
+        <div class="row mx-auto">
+            {% if shares|length > 0 %}
+                {% for share in shares %}
+                    <div class="row mb-4 mb-lg-5" style="border: 2px white solid">
+
+                        <div style="margin: 10px">
+                            <h3>{{share.0.fund_of_shares.name}}</h3>
+                            <h4>Current Value: {{share.0.current_value}}</h4>
+                            <a class="btn btn-primary shadow" style="background-color: limegreen;" role="button" href="{% url 'web:trader' share.0.fund_of_shares.fund_id %}">Trade {{share.0.fund_of_shares.name}}</a>
+                            <hr>
+                            {% for x in share %} 
+                                <p>{{x.share_id}} - Purchased at {{x.share_price_at_purchase}}</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %} 
+            <h2>You have no shares</h2>
+            <a class="btn btn-primary shadow" role="button" href="{% url 'web:marketplace' %}">Go to Marketplace</a>
+            {% endif %}
+        </div>
+    </div>
+    
+{% endblock %}
+    

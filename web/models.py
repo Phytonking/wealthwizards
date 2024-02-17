@@ -18,9 +18,12 @@ class Account(models.Model):
     cash_balance = models.DecimalField(max_digits=10, decimal_places=2)
     account_number = models.TextField()
     verified = models.BooleanField()
-
+    plaid_access_token = models.TextField(null=True)
+    SSN = models.TextField(null=True)
+    DateOfBirth = models.DateField(null=True)
     def __str__(self):
         return f"{self.user_detail.first_name} {self.user_detail.last_name}: {self.account_number}"
+    
 
 class Share(models.Model):
     share_id = models.UUIDField(auto_created=True)

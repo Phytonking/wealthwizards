@@ -1,0 +1,43 @@
+{% extends 'extratemplates/layout.html' %}
+{% load static %}
+
+{% block title %} 
+Marketplace
+{% endblock %}
+
+{% block body %}
+    <section class="py-5">
+        <div class="container py-5">
+            <div class="row mb-4 mb-lg-5">
+                <div class="col-md-8 col-xl-6 text-center mx-auto">
+                    <h2 class="fw-bold">Trading</h2>
+                    <p class="text-muted">Account Number: {{account.account_number}}&nbsp;</p>
+                    <h3>Cash Balance: {{account.cash_balance}}</h3>
+                    <hr>
+                </div>
+            </div>
+            <div class="row mb-4 mb-lg-5">
+                <form action="{% url 'web:trader' FundToTrade.fund_id %}" method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <select name="fund" class="form-control">
+                            {% for fund in funds %}
+                                <option value="{{fund.fund_id}}">{{fund.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <select name="tradeType" class="form-control">
+                            <option value="BUY">Buy</option>
+                            <option value="SELL">Sell</option>
+                        </select><br>
+                    </div>
+                    <div class="mb-3"><input class="form-control" type="number" name="numberOfShares" placeholder="Number of Shares to be Traded"></div>
+                    <div class="mb-3"><input class="form-control" type="submit" value="Trade"></div>
+                    
+                    <p style="color: red">{{error}}</p>
+                  </form>
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -21,18 +21,18 @@
         Email: <input name="email" placeholder="Email" type="email" required><br>
         Telephone: <input name="telephone" placeholder="Telephone Number" type="tel" required><br>
         Social Security Number/ITIN: <input name="SSN" placeholder="Enter SSN or ITIN" type="password" required><br>
-        Date of Birth: <input type="date" placeholder="Date of Birth" name="DOB" required><br>
+        Date of Birth: <input type="date" placeholder="Date of Birth" name="DOB" id="userDOB" required><br>
         Username: <input name="username" placeholder="Username" type="text" required><br>
         Password: <input name="password" placeholder="Password" type="password" required><br><br>
 
-        <div class="parental-info">
+        <div id="parental-info" style="display: none;">
             <h3>Parent/Legal Guardian Information</h3>
             First Name: <input name="parent_first_name" placeholder="First Name" type="text" required><br>
             Last Name: <input name="parent_last_name" placeholder="Last Name" type="text" required><br>
             Email: <input name="parent_email" placeholder="Email" type="email" required><br>
             Telephone: <input name="parent_telephone" placeholder="Telephone Number" type="tel" required><br>
             Date of Birth: <input type="date" placeholder="Date of Birth" name="parent_DOB" required><br>
-            Social Security Number: <input name="telephone" placeholder="Enter SSN" type="password" required><br>
+            Social Security Number: <input placeholder="Enter SSN" type="password" name="parent_SSN" required><br>
         </div>
 
         <div class="financial-info">
@@ -41,8 +41,27 @@
             Bank Account Number: <input name="bankAccNum" placeholder="Bank Account Number" type="text" required><br>
             Bank Routing Number: <input name="bankRoutNum" placeholder="Bank Routing Number" type="text" required><br>
         </div>
+
+        Re-Enter Password: <input name="Cpassword" placeholder="Re-enter Password" type="password" required><br><br>
         <input type="submit" class="btn" value="Register New Account">
       </form>
     </section>
+
+    <script>
+      function checkAge(){
+        while (true){
+          var bd = document.getElementById("userDOB");
+          var birthDate = new Date(bd.value);
+          var currentDate = new Date();
+          var rawAge = currentDate - birthDate;
+          var refAge = rawAge / (1000 * 60 * 60 * 24 * 365.25);
+          if (refAge <= 18){
+            document.getElementById("parental-info").style.display = "block";
+          } else {
+            document.getElementById("parental-info").style.display = "none";
+          }
+      }
+      }
+    </script>
 {% endblock %}
 
